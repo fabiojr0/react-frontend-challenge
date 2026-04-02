@@ -1,6 +1,20 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { useWatchlistStore } from "../watchlist-store";
 import type { Movie } from "@/shared/types";
+
+vi.mock("@/shared/config", () => ({
+  supabase: {
+    auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null } }) },
+  },
+}));
+
+vi.mock("../../services/watchlist-service", () => ({
+  watchlistService: {
+    fetch: vi.fn().mockResolvedValue([]),
+    add: vi.fn().mockResolvedValue(undefined),
+    remove: vi.fn().mockResolvedValue(undefined),
+  },
+}));
 
 const mockMovie: Movie = {
   id: 1,

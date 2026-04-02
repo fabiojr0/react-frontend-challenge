@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks";
+import { useWatchlistStore } from "@/features/watchlist/store";
 import { AppLayout } from "@/widgets/layout/app-layout";
 import { LoginPage } from "@/pages/login";
 import { DashboardPage } from "@/pages/dashboard";
@@ -9,6 +11,11 @@ import type { ReactNode } from "react";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
+  const fetchWatchlist = useWatchlistStore((s) => s.fetchWatchlist);
+
+  useEffect(() => {
+    if (user) fetchWatchlist();
+  }, [user, fetchWatchlist]);
 
   if (loading) {
     return (
