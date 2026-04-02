@@ -72,7 +72,8 @@ export function MoviePage() {
   const { data: movie, isLoading: isLoadingMovie } = useMovieDetails(movieId);
   const { data: credits } = useMovieCredits(movieId);
   const { data: videos } = useMovieVideos(movieId);
-
+  console.log(movie);
+  
   const { addMovie, removeMovie, isInWatchlist } = useWatchlistStore();
   const inWatchlist = movie ? isInWatchlist(movie.id) : false;
 
@@ -114,14 +115,16 @@ export function MoviePage() {
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-6xl px-4 pb-16">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 pb-16">
         <div className="-mt-32 flex flex-col gap-8 md:-mt-48 md:flex-row">
           {/* Poster */}
-          <img
-            src={getImageUrl(movie.poster_path, "w500")}
-            alt={movie.title}
-            className="h-auto w-[200px] shrink-0 self-center rounded-lg shadow-2xl md:w-[300px] md:self-start"
-          />
+          <div className="shrink-0 self-center md:self-start">
+            <img
+              src={getImageUrl(movie.poster_path, "w500")}
+              alt={movie.title}
+              className="w-[200px] rounded-lg object-contain shadow-2xl md:w-[300px]"
+            />
+          </div>
 
           {/* Details */}
           <div className="relative flex-1 space-y-4 pt-4">
@@ -173,7 +176,7 @@ export function MoviePage() {
         {credits && credits.cast.length > 0 && (
           <section className="mt-12">
             <h2 className="mb-4 text-2xl font-semibold">Cast</h2>
-            <div className="flex gap-4 overflow-x-auto pb-4">
+            <div className="cast-scroll flex gap-4 overflow-x-auto pb-4">
               {credits.cast.slice(0, 20).map((member) => (
                 <div key={member.id} className="w-[120px] shrink-0">
                   <img

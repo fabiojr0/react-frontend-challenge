@@ -7,7 +7,8 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 import type { SortingState } from "@tanstack/react-table";
-import { ArrowUpDown, Trash2 } from "lucide-react";
+import { ArrowUpDown, Trash2, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useWatchlistStore } from "@/features/watchlist/store";
 import { useGenres } from "@/features/movies/hooks";
 import { getImageUrl } from "@/shared/config";
@@ -51,7 +52,13 @@ export function WatchlistPage() {
           </button>
         ),
         cell: (info) => (
-          <span className="font-medium text-white">{info.getValue()}</span>
+          <Link
+            to={`/movie/${info.row.original.id}`}
+            className="flex items-center gap-1.5 font-medium text-white hover:text-primary transition-colors"
+          >
+            {info.getValue()}
+            <ExternalLink className="h-3.5 w-3.5 opacity-50" />
+          </Link>
         ),
       }),
       columnHelper.accessor("genre_ids", {

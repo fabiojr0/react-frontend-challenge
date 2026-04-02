@@ -71,7 +71,12 @@ export function useDiscoverMovies(
 
   if (filters.genre) params.with_genres = filters.genre;
   if (filters.yearStart) params["primary_release_date.gte"] = `${filters.yearStart}-01-01`;
-  if (filters.yearEnd) params["primary_release_date.lte"] = `${filters.yearEnd}-12-31`;
+  if (filters.yearEnd) {
+    // supports both "YYYY-MM-DD" (date input) and "YYYY" (year only)
+    params["primary_release_date.lte"] = filters.yearEnd.includes("-")
+      ? filters.yearEnd
+      : `${filters.yearEnd}-12-31`;
+  }
   if (filters.minRating) params["vote_average.gte"] = filters.minRating;
 
   const hasFilters = filters.genre || filters.yearStart || filters.yearEnd || filters.minRating;
