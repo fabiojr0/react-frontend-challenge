@@ -9,7 +9,8 @@ import {
 import { MovieCard, MovieCardSkeleton } from "@/shared/ui/movie-card";
 import { Pagination } from "@/shared/ui/pagination";
 import { Input } from "@/shared/ui";
-import { Star, X } from "lucide-react";
+import { Star, X, RotateCcw } from "lucide-react";
+import { Button } from "@/shared/ui";
 import { cn } from "@/lib/utils";
 
 function GenreCombobox({
@@ -245,6 +246,23 @@ export function DashboardPage() {
               onChange={(v) => { setMinRating(v); setPage(1); }}
             />
           </div>
+          {hasFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setGenre("");
+                setYearStart("");
+                setYearEnd("");
+                setMinRating("");
+                setPage(1);
+              }}
+              className="mb-0.5 text-muted-foreground hover:text-foreground"
+            >
+              <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+              Limpar filtros
+            </Button>
+          )}
         </div>
       )}
 
