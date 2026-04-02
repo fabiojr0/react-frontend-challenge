@@ -1,82 +1,62 @@
-Você deve construir o CineDash, um dashboard de curadoria e descoberta de filmes utilizando a API do TMDB. Imagine que este é um produto interno usado por curadores de cinema para selecionar quais filmes entrarão no catálogo de um streaming.
+# CineDash
 
----
+Dashboard de curadoria e descoberta de filmes utilizando a API do TMDB. Produto interno para curadores de cinema selecionarem filmes para o catálogo de um streaming.
 
-## O Objetivo
+## Funcionalidades
 
-O desafio consiste em desenvolver uma aplicação Front-end que consuma uma API pública, focando na criação de interfaces ricas (Dashboards, Tabelas, Filtros) e na gestão eficiente de estado e dados assíncronos.
+### Autenticação
+- Login e registro com Supabase (email + senha)
+- Validação de formulários com Zod (email válido, senha > 6 caracteres, confirmação de senha)
+- Sessão persistida automaticamente ao recarregar a página
+- Rotas protegidas: apenas usuários autenticados acessam o dashboard
 
-Use o supabase para a autencicação, persistencia, lista de favoritos 
+### Dashboard de Descoberta
+- Listagem de filmes trending/popular com paginação
+- Busca com debounce (300ms) para não sobrecarregar a API
+- Filtros avançados: gênero (combobox com busca), range de ano, nota mínima (slider)
+- Botão para resetar todos os filtros
 
-Autenticação (Simulada): Como não temos backend, a autenticação deve ser tratada no front-end:
-Tela de Login com validação via Zod (Email válido e senha > 6 caracteres).
-Apenas usuários autenticados podem acessar a busca e a estante.
-Diferencial: Persistir a sessão do usuário ao recarregar a página.
+### Minha Lista (Watchlist)
+- Adicionar/remover filmes da lista de favoritos
+- Tabela com TanStack Table: Poster, Título (link direto), Gênero, Data de Lançamento, Rating, Ações
+- Ordenação por Título, Data ou Rating
+- Persistência via Zustand persist middleware (sobrevive ao refresh)
 
-Dashboard de Descoberta:
-Listagem de filmes (Trending/Popular) com paginação ou infinite scroll.
-Requisito Técnico: Implementar Debounce no input para não floodar a API.
-Paginação: Implementar paginação (botões ou infinite scroll).
-Filtros Avançados: Filtrar por Gênero, Ano de Lançamento e Nota Mínima (Rating).
+### Detalhes do Filme
+- Rota dinâmica `/movie/:id` com backdrop, poster, sinopse, elenco (scroll horizontal estilizado), trailer do YouTube
+- Botão para adicionar/remover da watchlist
 
-Minha Lista (Watchlist):
-Adicionar/Remover filmes de uma lista de favoritos.
-Colunas: Título, Gênero, Data de Lançamento, Rating e Ações.
-Ordenação: Permitir ordenar a tabela por Título, Gênero ou Rating.
-Persistência: Os dados do dashboard devem sobreviver ao refresh da página (uso de persist middleware do Zustand).
+### UI/UX
+- Tema Dark/Light (amarelo com preto) persistido via Zustand
+- Layout responsivo (mobile + desktop) com navegação bottom bar no mobile
+- Feedback visual: skeletons de loading, toasts de erro/sucesso
 
-Detalhes do Filme:
-Rota dinâmica (/movie/:id) exibindo sinopse, elenco, nota e trailer (se houver).
-Botão para adicionar/remover do dashboard.
+## Tech Stack
 
----
+| Categoria | Tecnologia |
+|-----------|-----------|
+| Core | React 19, TypeScript (Strict), Vite |
+| Server State | TanStack Query |
+| Client State | Zustand (com persist) |
+| Routing | React Router v6 |
+| UI | Shadcn/ui pattern + TailwindCSS v4 |
+| Tabelas | TanStack Table |
+| Formulários | React Hook Form + Zod |
+| Auth | Supabase |
+| Testes | Vitest + React Testing Library |
 
-## Tech Stack Obrigatória
+## Arquitetura
 
-Para alinhar com a nossa stack atual e garantir uma avaliação justa, exigimos o uso das seguintes tecnologias. **Por favor, não utilize alternativas (ex: Redux ou Context API para estado global complexo) a menos que justificável no seu README.**
+Feature-Sliced Design (FSD) com separação clara entre UI, lógica e dados.
 
-- **Core:** React 18+, TypeScript (Strict), Vite.
-- **Server State & Cache:** TanStack Query.
-- **Client State:** Zustand.
-- **Routing:** TanStack Router (Preferencial) ou React Router v6 (com Data Loaders).
-- **UI Components:** Shadcn/ui + TailwindCSS.
-- **Formulários:** React Hook Form ou TanStack Form + Zod (validação).
-- **Testes:** Vitest + React Testing Library.
+```
+src/
+├── app/           # Providers, Router
+├── features/      # Auth, Movies, Theme, Watchlist
+├── pages/         # Login, Dashboard, Movie, Watchlist
+├── shared/        # Config, Types, UI components
+├── widgets/       # Layout
+└── lib/           # Utilitários
+```
 
-> **Diferencial:** Implementação de `TanStack Table` para listagens complexas.
-
----
-
-### 1. Arquitetura e Organização
-
-- Uso de **Feature-Sliced Design (FSD)**, Clean Architecture ou uma estrutura modular sólida.
-- Separação clara entre UI (Componentes), Lógica (Hooks) e Dados (Services/Adapters).
-- Código limpo, legível e seguindo princípios SOLID.
-
-### 2. Qualidade Técnica
-
-- Domínio do **TypeScript** (evitar `any`, tipagem correta de generics e props).
-- Uso correto do **TanStack Query** (cache keys, invalidation, prefetching).
-- Tratamento de erros e estados de loading (Skeletons, Error Boundaries).
-- Performance (memorização onde necessário, debouncing em buscas).
-
-### 3. Testes e Confiabilidade
-
-- Não buscamos 100% de cobertura, mas sim **testes significativos**.
-- Testes unitários em hooks complexos e utilitários.
-- Testes de integração nos fluxos principais (ex: Adicionar item à lista, filtrar tabela).
-
-### 4. Documentação e Git
-
-- Histórico de commits organizado.
-- Arquivo `INSTRUCTIONS.md` com instruções claras de como rodar o projeto e qual projeto foi escolhido.
-- Arquivo `ARCHITECTURE.md` explicando suas decisões técnicas (Por que usou X? Como resolveu Y?).
-
-
-
-Layout responsivo e fluido.
-Feedback visual para o usuário (Loadings, Skeletons, Toasts de erro/sucesso).
-Tema Dark/Light (persistido via Zustand).
-Feature-Sliced Design (FSD) ou Clean Architecture adaptada ao Frontend.
-Isolamento de regras de negócio (hooks customizados vs componentes de UI).
-
+Veja [ARCHITECTURE.md](ARCHITECTURE.md) para detalhes das decisões técnicas e [INSTRUCTIONS.md](INSTRUCTIONS.md) para instruções de setup.
