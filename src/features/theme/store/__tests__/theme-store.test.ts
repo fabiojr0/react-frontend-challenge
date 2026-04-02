@@ -6,18 +6,18 @@ describe("themeStore", () => {
     useThemeStore.setState({ theme: "dark" });
   });
 
-  it("should have dark as default theme", () => {
+  it("deve ter 'dark' como tema padrão", () => {
     expect(useThemeStore.getState().theme).toBe("dark");
   });
 
-  it("should toggle theme", () => {
+  it("deve alternar o tema", () => {
     useThemeStore.getState().toggleTheme();
     expect(useThemeStore.getState().theme).toBe("light");
     useThemeStore.getState().toggleTheme();
     expect(useThemeStore.getState().theme).toBe("dark");
   });
 
-  it("should set theme directly", () => {
+  it("deve definir o tema diretamente", () => {
     useThemeStore.getState().setTheme("light");
     expect(useThemeStore.getState().theme).toBe("light");
   });

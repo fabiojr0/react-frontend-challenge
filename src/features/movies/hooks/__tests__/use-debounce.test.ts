@@ -3,12 +3,12 @@ import { renderHook, act } from "@testing-library/react";
 import { useDebounce } from "../use-debounce";
 
 describe("useDebounce", () => {
-  it("should return initial value immediately", () => {
+  it("deve retornar o valor inicial imediatamente", () => {
     const { result } = renderHook(() => useDebounce("hello", 300));
     expect(result.current).toBe("hello");
   });
 
-  it("should debounce value changes", async () => {
+  it("deve aplicar debounce nas mudanças de valor", async () => {
     vi.useFakeTimers();
     const { result, rerender } = renderHook(
       ({ value, delay }) => useDebounce(value, delay),

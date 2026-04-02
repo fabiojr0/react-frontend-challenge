@@ -29,19 +29,19 @@ describe("watchlistStore", () => {
     useWatchlistStore.setState({ movies: [] });
   });
 
-  it("should add a movie to watchlist", () => {
+  it("deve adicionar um filme à watchlist", () => {
     useWatchlistStore.getState().addMovie(mockMovie);
     expect(useWatchlistStore.getState().movies).toHaveLength(1);
     expect(useWatchlistStore.getState().movies[0].id).toBe(1);
   });
 
-  it("should not add duplicate movies", () => {
+  it("não deve adicionar filmes duplicados", () => {
     useWatchlistStore.getState().addMovie(mockMovie);
     useWatchlistStore.getState().addMovie(mockMovie);
     expect(useWatchlistStore.getState().movies).toHaveLength(1);
   });
 
-  it("should remove a movie from watchlist", () => {
+  it("deve remover um filme da watchlist", () => {
     useWatchlistStore.getState().addMovie(mockMovie);
     useWatchlistStore.getState().addMovie(mockMovie2);
     useWatchlistStore.getState().removeMovie(1);
@@ -49,7 +49,7 @@ describe("watchlistStore", () => {
     expect(useWatchlistStore.getState().movies[0].id).toBe(2);
   });
 
-  it("should check if movie is in watchlist", () => {
+  it("deve verificar se o filme está na watchlist", () => {
     useWatchlistStore.getState().addMovie(mockMovie);
     expect(useWatchlistStore.getState().isInWatchlist(1)).toBe(true);
     expect(useWatchlistStore.getState().isInWatchlist(999)).toBe(false);
