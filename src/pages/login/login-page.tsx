@@ -17,10 +17,21 @@ import {
   CardFooter,
 } from "@/shared/ui";
 
-const authSchema = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(7, "Password must be longer than 6 characters"),
-});
+const authSchema = z
+  .object({
+    email: z.email("Insira um email válido"),
+    password: z.string().min(7, "A senha deve ter mais de 6 caracteres"),
+    confirmPassword: z.string(),
+    mode: z.enum(["signin", "signup"]),
+  })
+  .refine((data) => data.mode === "signin" || data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  })
+  .refine((data) => data.mode === "signin" || data.confirmPassword.length > 0, {
+    message: "Confirme sua senha",
+    path: ["confirmPassword"],
+  });
 
 type AuthFormData = z.infer<typeof authSchema>;
 
@@ -35,14 +46,20 @@ export function LoginPage() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", password: "", confirmPassword: "", mode: "signin" },
   });
 
+  const switchMode = (newMode: "signin" | "signup") => {
+    setMode(newMode);
+    setValue("mode", newMode);
+    reset({ email: "", password: "", confirmPassword: "", mode: newMode });
+  };
+
   const toggleMode = () => {
-    setMode((prev) => (prev === "signin" ? "signup" : "signin"));
-    reset();
+    switchMode(mode === "signin" ? "signup" : "signin");
   };
 
   const onSubmit = async (data: AuthFormData) => {
@@ -87,10 +104,7 @@ export function LoginPage() {
             <div className="mb-2 flex rounded-lg bg-gray-800/60 p-1">
               <button
                 type="button"
-                onClick={() => {
-                  setMode("signin");
-                  reset();
-                }}
+                onClick={() => switchMode("signin")}
                 className={`flex-1 rounded-md py-2 text-sm font-medium transition-all ${
                   mode === "signin"
                     ? "bg-primary text-primary-foreground shadow-sm"
@@ -101,10 +115,7 @@ export function LoginPage() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setMode("signup");
-                  reset();
-                }}
+                onClick={() => switchMode("signup")}
                 className={`flex-1 rounded-md py-2 text-sm font-medium transition-all ${
                   mode === "signup"
                     ? "bg-primary text-primary-foreground shadow-sm"
@@ -144,7 +155,7 @@ export function LoginPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-gray-300">
-                  Password
+                  Senha
                 </Label>
                 <Input
                   id="password"
@@ -161,6 +172,26 @@ export function LoginPage() {
                   </p>
                 )}
               </div>
+
+              {mode === "signup" && (
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword" className="text-gray-300">
+                    Confirmar senha
+                  </Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    {...register("confirmPassword")}
+                  />
+                  {errors.confirmPassword && (
+                    <p className="text-sm text-red-400">
+                      {errors.confirmPassword.message}
+                    </p>
+                  )}
+                </div>
+              )}
             </CardContent>
 
             <CardFooter className="flex-col gap-4">
