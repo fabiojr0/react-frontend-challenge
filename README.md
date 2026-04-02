@@ -1,27 +1,37 @@
-# ⚛️ Desafio React Frontend
-
-Bem-vindo ao repositório de avaliação técnica para a vaga de **Desenvolvedor React Pleno**.
-
-Este não é apenas um teste de codificação; é uma oportunidade para você demonstrar como estrutura aplicações escaláveis, toma decisões arquiteturais e prioriza a experiência do usuário.
-
-Estamos buscando profissionais que entendam que "fazer funcionar" é apenas o primeiro passo. O nosso foco está também em: **Manutenibilidade, Performance e Boas Práticas.**
+Você deve construir o CineDash, um dashboard de curadoria e descoberta de filmes utilizando a API do TMDB. Imagine que este é um produto interno usado por curadores de cinema para selecionar quais filmes entrarão no catálogo de um streaming.
 
 ---
 
-## 🎯 O Objetivo
+## O Objetivo
 
 O desafio consiste em desenvolver uma aplicação Front-end que consuma uma API pública, focando na criação de interfaces ricas (Dashboards, Tabelas, Filtros) e na gestão eficiente de estado e dados assíncronos.
 
-### 📂 Escolha sua Missão
+Use o supabase para a autencicação, persistencia, lista de favoritos 
 
-Você tem a liberdade de escolher **um** dos dois desafios abaixo para implementar. Ambos possuem o mesmo peso e complexidade técnica. Escolha aquele com o qual você se sentir mais criativo:
+Autenticação (Simulada): Como não temos backend, a autenticação deve ser tratada no front-end:
+Tela de Login com validação via Zod (Email válido e senha > 6 caracteres).
+Apenas usuários autenticados podem acessar a busca e a estante.
+Diferencial: Persistir a sessão do usuário ao recarregar a página.
 
-- **[Opção A: CineDash (Filmes)](./cases/01-cinedash.md)** – Crie um dashboard analítico para curadoria de cinema.
-- **[Opção B: Libris (Livros)](./cases/02-libris.md)** – Desenvolva um gerenciador de biblioteca pessoal e estante virtual.
+Dashboard de Descoberta:
+Listagem de filmes (Trending/Popular) com paginação ou infinite scroll.
+Requisito Técnico: Implementar Debounce no input para não floodar a API.
+Paginação: Implementar paginação (botões ou infinite scroll).
+Filtros Avançados: Filtrar por Gênero, Ano de Lançamento e Nota Mínima (Rating).
+
+Minha Lista (Watchlist):
+Adicionar/Remover filmes de uma lista de favoritos.
+Colunas: Título, Gênero, Data de Lançamento, Rating e Ações.
+Ordenação: Permitir ordenar a tabela por Título, Gênero ou Rating.
+Persistência: Os dados do dashboard devem sobreviver ao refresh da página (uso de persist middleware do Zustand).
+
+Detalhes do Filme:
+Rota dinâmica (/movie/:id) exibindo sinopse, elenco, nota e trailer (se houver).
+Botão para adicionar/remover do dashboard.
 
 ---
 
-## 🛠 Tech Stack Obrigatória
+## Tech Stack Obrigatória
 
 Para alinhar com a nossa stack atual e garantir uma avaliação justa, exigimos o uso das seguintes tecnologias. **Por favor, não utilize alternativas (ex: Redux ou Context API para estado global complexo) a menos que justificável no seu README.**
 
@@ -36,10 +46,6 @@ Para alinhar com a nossa stack atual e garantir uma avaliação justa, exigimos 
 > **Diferencial:** Implementação de `TanStack Table` para listagens complexas.
 
 ---
-
-## 🧠 Critérios de Avaliação (O que olhamos)
-
-Seu código será revisado como se fosse um Pull Request real para a nossa codebase de produção.
 
 ### 1. Arquitetura e Organização
 
@@ -66,23 +72,11 @@ Seu código será revisado como se fosse um Pull Request real para a nossa codeb
 - Arquivo `INSTRUCTIONS.md` com instruções claras de como rodar o projeto e qual projeto foi escolhido.
 - Arquivo `ARCHITECTURE.md` explicando suas decisões técnicas (Por que usou X? Como resolveu Y?).
 
----
 
-## 🚀 Como entregar
 
-1.  Faça um **fork** deste repositório para a sua própria conta do GitHub.
-2.  Desenvolva sua solução em uma branch separada (ex: `feature/cinedash-impl` ou `feature/libris-impl`).
-3.  Quando finalizar, abra um **Pull Request** da sua branch de desenvolvimento para a branch `main` do **seu** repositório forkado. **Atenção: Não abra o PR para o repositório original da empresa.**
-4.  No corpo do PR, utilize o template fornecido e inclua uma breve descrição do que foi feito, além do projeto escolhido.
-5.  Envie o link do seu Pull Request (ou do repositório) para o recrutador responsável.
+Layout responsivo e fluido.
+Feedback visual para o usuário (Loadings, Skeletons, Toasts de erro/sucesso).
+Tema Dark/Light (persistido via Zustand).
+Feature-Sliced Design (FSD) ou Clean Architecture adaptada ao Frontend.
+Isolamento de regras de negócio (hooks customizados vs componentes de UI).
 
----
-
-## ⏳ Prazo e Escopo
-
-Sabemos que este é um desafio complexo.
-
-- **Prazo para entrega:** Você terá o prazo de 7 dias corridos para realização do desafio.
-- **Faltou tempo?** Se não conseguir entregar tudo, **priorize a qualidade sobre a quantidade**. É melhor entregar uma funcionalidade perfeitamente arquitetada e testada do que três funcionalidades quebradas. Documente o que faltou no seu README.
-
-**Boa sorte! Estamos ansiosos para ver seu código.** 🚀
